@@ -1,50 +1,65 @@
-import pygame #основная библиотека с помощью которой создаем игру
-import sys #нужна для завершение программы
+import pygame
+import sys
 
-pygame.init() #команда запускает все необходимые модули пигейм
+import settings
 
-WIDTH = 1200 #ширина окна с пикселями
-HEIGHT = 700 #высота окна с пикселями
+pygame.init()
 
-screen = pygame.display.set_mode((WIDTH, HEIGHT)) #создает игровое окно
-pygame.display.set_caption("Wild World - Safari Rescue") #название нашей игры
+screen = pygame.display.set_mode(
+    (settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT),
+    settings.WINDOW_FLAGS #создаем игровое окно
+)
 
-clock = pygame.time.Clock() #создаем специальный объект, который контролирует время
-FPS = 60 #количество кадров в сек. Это нужно чтобы игра не работала с разной скоростью на разных компах
+pygame.display.set_caption(settings.GAME_TITLE)
 
-#теперь создаем цвета объектов в игре
-SKY = (135, 190, 220)
-GRASS = (112, 145, 65)
-GROUND = (145, 119, 70)
-SUN = (255, 205, 90)
-TREE = (55, 95, 50)
+clock = pygame.time.Clock()
 
-font = pygame.font.SysFont("Arial", 32, bold=True) #создаем шрифт для текста внутри игры: фонт переменная которая хранит шрифт, сисфонт выбирает щрифт, название, размер и жирность текста
+title_font = pygame.font.SysFont("Arial", 48, bold=True)
+info_font = pygame.font.SysFont("Arial", 24)
 
-running = True #отвечает за то что должна ли игра продолжать работать, тру значит работает
+BACKGROUND_COLOR = (112, 158, 75)
+TEXT_COLOR = (255, 255, 255)
 
-while running: #это цикл, который повторяет команды, пока условие остаётся истинным.
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False #эта команда отвечает за то события в игре, в нашем случае с фолс игра закрывается
+def draw_game():
+    screen.fill(BACKGROUND_COLOR)
+    title = title_font.render(
+        settings.GAME_TITLE,
+        True,
+        TEXT_COLOR
+    )
 
-    screen.fill(SKY) #заполняем все игровое окно цветом небо
-    pygame.draw.circle(screen, SUN, (1000, 120), 65) #создаем круг: скрин это там где мы рисуем, сан цвет круга, внутри скобочки координаты центра, и последний радиус круга
-    pygame.draw.rect(screen, GROUND, (0, 530, WIDTH, 170)) #рисует прямоугольник, то есть мы рисуем корич землю в нижней части окна
-    pygame.draw.rect(screen, GRASS, (0, 480, WIDTH, 80)) #почти тоже самое но зеленый цвет и чуть выше земли
-    pygame.draw.rect(screen, (100, 65, 35), (850, 320, 35, 210)) #рисуем дерево а точнее ствол
-    pygame.draw.circle(screen, TREE, (870, 300), 100) #рисуем зеленую крону дерева
+    screen.blit(
+        title,
+        (settings.SCREEN_WIDTH // 2 - title.get_width() // 2, 100)
+    )
 
-    title = font.render("Wild World - Safari Rescue", True, (255, 255, 255)) #размещает изображение на экране
-    screen.blit(title, (40, 35)) #таким образом мы добавили названия игры с белым цветом
+    info = info_font.render(
+        "Welcome to the African Savanna!",
+        True,
+        TEXT_COLOR
+    )
 
-    pygame.display.flip() #эта команда показывает игроку новый кадр
-    clock.tick(FPS) #Эта команда ограничивает частоту работы игрового цикла
-            
+    screen.blit(
+        info,
+        (settings.SCREEN_WIDTH // 2 - info.get_width() // 2, 180)
+    )
+
+    running = True
+
+    while running:
+
+        for event in pygame.event.get():
+            print(event)
+            if event.type == pygame.QUIT:
+                running = False
+
+        draw_game()
+
+        pygame.display.flip()
+
+        clock.tick(settings.FPS)
+
+
 pygame.quit()
-sys.exit()
-
-
-
-
+sys.exit
 
